@@ -1,0 +1,198 @@
+Docker hub account, id=sabayahyaa, pass=Misk2013+
+we need to cd where the Dockerfile, the code folder are
+
+
+Heroku log in: sabayahyaa@gmail.com, pass=Misk2013+
+https://medium.com/@deepakshakya/beginners-guide-to-use-docker-build-run-push-and-pull-4a132c094d75
+
+1. image== class, container==instance, we can not modify the container
+2. To modify the container 5modify the python code), we create a volume
+3. Dockerfile is a txt file without extension
+4. we create a folder dockerfiles, then we cd to it (saba@saba-HP-EliteBook-840-G1:~/dockerfiles$) is my path, there I use docker command 
+5. we can use visual studio
+
+
+Inside the Dockerfile:
+---------------------------
+FROM python:2.7.17  
+RUN mkdir app       #The RUN keyword can be uses to run a command on the system.
+RUN mkdir app/code
+COPY  ./code/hello_world.py /app/hello_world.py   #copy from the source to the docker tree path
+WORKDIR /app                                      #define the working directory, where the command will run on the docker tree
+CMD ["python", "hello_world.py"]                  #CMD is used to define the command that the conainer will run when it will be launched
+                                                  #when I create an instanse, this command will be executed 
+******************************************
+***********
+**********     Images
+***********
+***********************************************
+
+#############  built an image          (docker build -t image_name .),
+#############  built an image with tag (docker build -t image_name:tag_name .),
+ex, docker build -t saba_image .
+Successfully tagged image_name:latest, our image is taged with the latest
+If we make changes in our image and re-build it, a new image will be created with the tag latest and our old image will no longer have it. It's useful when you want to use the most recent version of your image.
+
+
+################ list all images ( docker image ls, or docker images)
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+image_name          latest              81ace0e158ee        12 seconds ago      902MB
+
+
+
+
+
+then: docker image ls
+############## remove an image (docker image rm <IMAGE_ID, imagename:tag>, or docker rmi imagenamr)
+ex, docker image rm image_another:v1.0
+
+
+******************************************
+***********
+**********     container
+***********
+***********************************************
+
+#####pull and run a container (instance) (docker run container_name) container_name is the image name that we want to run
+##############     docker run -t container_name (this will run the latest version                       
+##############     docker run container_name:tage (this will run the tag version
+ex, docker run -t saba_image .
+
+
+#####pull and do not run a container (docker pull image
+
+################## list the running container (docker container lr, or docker ps
+################## list the running and destrpyed container (docker container lr, or docker ps -a
+Note, the run saba_image is stopped because the code is run and finished, the container stops running
+
+################ stop a container from running (docker stop container_name)
+################ remove a container for ever (docker rm container_name)
+
+
+******************************************************
+********** 4. Learn to ‘tag’ and ‘push’ image to your docker hub account
+**********  Docker hub
+********** login id:sabayahyaa,  pass:, then create a a repository, this will be your image, everyone can pull and use it
+************************************************************
+#after creating a new repository in the docker hub, I can use (docker push sabayahyaa/saba_image:tagname) tp push to this repository, so that everyone can use it.
+Use::::::::::::::::::: docker push sabayahyaa/saba_image:tagname
+
+After building a saba_image, I want to push it
+1. we need to tag our image that you need to push it using 
+################(docker tag (docker tag <image_id of saba_image> <your docker hub user name> /<image name>:latest), note latest is the tag name
+ex;  docker tag bafed8285b5a sabayahyaa/saba_image:latest
+
+2. if I do #docker images
+saba_image              latest              bafed8285b5a        2 hours ago         902MB
+sabayahyaa/saba_image   latest              bafed8285b5a        2 hours ago         902MB
+
+3. Push your tagged image to Docker Hub, using the ‘docker push’ command
+################(docker push s
+NOTE/ we need to login inside the terminal (docker login), then
+                                           (docker push sabayahyaa/saba_image)
+
+
+
+
+
+*******************************************************************************
+*****************
+*****************    Orhan, sheet
+*****************
+**********************************************************************************
+
+some of My Docker notes:
+
+important: everytime use with your username(user_name/image_name instead of image_name) otherwise you could not push your image to docker hub
+[12:20 AM]
+----------------------------------------------------
+A -> from scratch:
+----------------------------------------------------
+1 - create a Dockerfile and folders-files mentioned(your project files and folders) in Dockerfile: open an editor and save file named: Dockerfile
+(do not forget to create a folder(/code) and in it hello.py file sample code in it: print("Hello world!"))
+sample Dockerfile: 
+FROM python: 3
+# you can add comment but it must to be an independent line like this one
+RUN mkdir /app
+COPY code/hello.py /app/hello.py
+WORKDIR /app
+CMD["python", "hello.py"]
+
+2 - to create an image by the Dockerfile, run: (use any name instead of image_name(read again important note above))
+        
+        "docker build -t image_name . "
+
+3 - to create a container from an image, run: (use any name instead of new_container)
+        
+        "docker run --name new_container image_name"
+
+    2.option for container with a volume(-v) to make changes in any files( in the container) run: 
+        
+        "docker run -v /path/to/your/folder:/app -it image_name bash"
+
+        volumes supply to open the container on VScode easily.
+4 - optional: you can push your image to docker hub to share with others, run:
+        
+        "docker push orhannurkan/image_name"
+(edited)
+[12:21 AM]
+----------------------------------------------------
+B -> With an existing image or containers:
+----------------------------------------------------
+if you will run an image that is on your computer skip step-1 start with step-2
+1 - optional: to clone an old image(from docker hub) to your PC, run: 
+"docker pull image_name"
+
+    to list images on your PC, run: 
+    
+    "docker images"
+
+    to list containers on your PC, run: 
+    
+    "docker container ls -a"
+
+2 - (use any old image from the list: 
+"docker images"
+
+)
+to open an old image with a new container to change, run: 
+        
+        "docker run -it image_name bash"
+
+    optional: use volume(-v) to open your container in VScode easily, run: 
+        
+        "docker run -v /path/to/your/folder:/app -it image_name bash"
+
+3 - to open an old container(which is running) to change, run:(use any old container name from the list: 
+docker container ls -a
+
+"docker exec -it container_name bash"
+
+    - if the container is stopped(before above line) run: 
+"docker start container_name"
+
+4 - make changes on files(change contents of the container) with nano or vim or Vscode or anytool
+5 - from this changed container
+    - to create a new image for example"last_image_name" run:
+        
+        "docker commit container_name last_image_name"
+
+    - or to save on an old image for example"image_name" run:
+        
+        "docker commit container_name image_name"
+
+6 - Optional: if you want push it to docker hub, run:
+    
+    "docker push orhannurkan/last_image_name"
+
+
+
+
+
+
+
+
+
+
+
+

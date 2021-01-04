@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Results</h1>
+        <h3>Price Prediction</h3>
+
+<form id="" action="{{url_for('predict_page')}}" method="post" enctype="multipart/form-data">
+
+   <input type="file" name="file" accept=".json">
+     <input type="submit" value="send">
+
+
+</form>
+
+<p>  {{r}}  {{result}}</p>
+
+{% endblock %}

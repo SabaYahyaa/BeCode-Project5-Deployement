@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Results</h1>
+        <h3>Price Prediction</h3>
+    <!--
+    {%for i in range(0, len)%}
+        <p>result{{ i }} : {{ price_predicted[i] }}</p>
+    {%endfor%}
+-->
+  <table style="width:100%">
+  <tr>
+  	<th>Predicted-Price</th>
+  {%for col in original_json_df.columns%}
+    <th>{{ col }}</th>
+  {%endfor%}
+  </tr>
+  {%for index, row in original_json_df.iterrows():%}
+  <tr>
+  	<td>{{ price_predicted[index] }}</td>
+  	{%for col in original_json_df.columns%}
+    <td>{{ row[col] }}</td>
+    {%endfor%}
+  </tr>
+  {%endfor%}
+</table>
+    </div>
+{% endblock content %}
